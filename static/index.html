@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .applications-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .app-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .app-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-not-submitted { background: #ffc107; color: #000; }
+        .status-submitted { background: #17a2b8; color: white; }
+        .status-interview { background: #28a745; color: white; }
+        .status-rejected { background: #dc3545; color: white; }
+
+        .success {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Job Application Assistant</h1>
+            <p>AI-Powered Resume Analysis & Application Tracking</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('profile')">👤 Profile</button>
+            <button class="tab" onclick="showTab('analyze')">📊 Resume Analyzer</button>
+            <button class="tab" onclick="showTab('answer')">✍️ Answer Generator</button>
+            <button class="tab" onclick="showTab('matcher')">🔍 Job Matcher</button>
+            <button class="tab" onclick="showTab('dashboard')">📋 Dashboard</button>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile" class="tab-content active">
+            <h2>Create Your Profile</h2>
+            <p style="color: #666; margin-bottom: 20px;">Store your information for quick application autofill</p>
+            
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="name" placeholder="John Doe">
+            </div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="john@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="phone" placeholder="+1 234 567 8900">
+            </div>
+            
+            <div class="form-group">
+                <label>Skills</label>
+                <textarea id="skills" placeholder="Python, FastAPI, Docker, AWS, etc."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Education</label>
+                <textarea id="education" placeholder="B.S. in Computer Science, University Name (2018-2022)"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Work History</label>
+                <textarea id="work_history" placeholder="Software Engineer at Company (2022-Present)&#10;- Developed scalable APIs&#10;- Led team of 3 developers"></textarea>
+            </div>
+            
+            <button onclick="createProfile()">Save Profile</button>
+            <div id="profile-result"></div>
+        </div>
+
+        <!-- Resume Analyzer Tab -->
+        <div id="analyze" class="tab-content">
+            <h2>Resume-to-JD Scorer</h2>
+            <p style="color: #666; margin-bottom: 20px;">Get AI-powered insights on your resume match</p>
+            
+            <div class="form-group">
+                <label>Your Resume</label>
+                <textarea id="resume" placeholder="Paste your resume text here..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Job Description URL</label>
+                <input type="url" id="jd_url" placeholder="https://www.linkedin.com/jobs/view/...">
+            </div>
+            
+            <button onclick="analyzeResume()">Analyze Match</button>
+            <div id="analyze-result"></div>
+        </div>
+
+        <!-- Answer Generator Tab -->
+        <div id="answer" class="tab-content">
+            <h2>Tailored Answer Generator</h2>
+            <p style="color: #666; margin-bottom: 20px;">Generate personalized answers for application questions</p>
+            
+            <div class="form-group">
+                <label>Your Profile Summary</label>
+                <textarea id="profile_text" placeholder="Brief summary of your background, skills, and experience..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Job Description URL</label>
+                <input type="url" id="answer_jd_url" placeholder="https://www.linkedin.com/jobs/view/...">
+            </div>
+            
+            <div class="form-group">
+                <label>Application Question</label>
+                <input type="text" id="question" placeholder="Why are you a good fit for this role?">
+            </div>
+            
+            <button onclick="generateAnswer()">Generate Answer</button>
+            <div id="answer-result"></div>
+        </div>
+
+        <!-- Job Matcher Tab -->
+        <div id="matcher" class="tab-content">
+            <h2>🔍 Job Matcher</h2>
+            <p style="color: #666; margin-bottom: 20px;">Find real LinkedIn jobs that match your resume using AI</p>
+            
+            <div class="form-group">
+                <label>Your Resume / Skills Summary</label>
+                <textarea id="matcher_resume" placeholder="Paste your resume or skills summary here...&#10;&#10;Example:&#10;Software Engineer with 5 years experience in Python, FastAPI, React.&#10;Skills: Python, JavaScript, Docker, AWS, PostgreSQL"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Job Search Query</label>
+                <input type="text" id="job_query" placeholder="e.g., Python Developer, Full Stack Engineer">
+            </div>
+            
+            <div class="form-group">
+                <label>Location (optional)</label>
+                <input type="text" id="job_location" placeholder="e.g., Remote, New York, San Francisco">
+            </div>
+            
+            <div class="form-group">
+                <label>Minimum Match Score (%)</label>
+                <input type="number" id="min_score" min="0" max="100" value="60" placeholder="60">
+            </div>
+            
+            <button onclick="searchJobs()">🚀 Search LinkedIn Jobs</button>
+            <p style="color: #999; font-size: 12px; margin-top: 10px;">⚡ Searches real-time LinkedIn job postings and analyzes match scores</p>
+            <div id="matcher-result"></div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content">
+            <h2>Application Dashboard</h2>
+            <p style="color: #666; margin-bottom: 20px;">Track all your job applications in one place</p>
+            
+            <div class="form-group">
+                <label>User ID (from profile creation)</label>
+                <input type="number" id="dashboard_user_id" placeholder="1">
+            </div>
+            
+            <button onclick="loadDashboard()">Load Applications</button>
+            
+            <h3 style="margin-top: 30px;">Add New Application</h3>
+            <div class="form-group">
+                <label>Company Name</label>
+                <input type="text" id="company_name" placeholder="Google">
+            </div>
+            
+            <div class="form-group">
+                <label>Job Title</label>
+                <input type="text" id="job_title" placeholder="Senior Software Engineer">
+            </div>
+            
+            <div class="form-group">
+                <label>Job URL</label>
+                <input type="url" id="app_jd_url" placeholder="https://...">
+            </div>
+            
+            <div class="form-group">
+                <label>Status</label>
+                <select id="status" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px;">
+                    <option value="Not Submitted">Not Submitted</option>
+                    <option value="Submitted">Submitted</option>
+                    <option value="Initial Response">Received Initial Response</option>
+                    <option value="Interview Requested">Interview Requested</option>
+                    <option value="Onsite Interview">Onsite/Video Interview</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+            
+            <button onclick="addApplication()">Add Application</button>
+            
+            <div id="applications-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+        let currentUserId = null;
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        async function createProfile() {
+            const data = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                skills: document.getElementById('skills').value,
+                education: document.getElementById('education').value,
+                work_history: document.getElementById('work_history').value
+            };
+
+            const resultDiv = document.getElementById('profile-result');
+            resultDiv.innerHTML = '<div class="loading">Creating profile...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to create profile');
+                }
+
+                const result = await response.json();
+                currentUserId = result.id;
+                
+                resultDiv.innerHTML = `<div class="result success">✅ Profile created! Your User ID: ${result.id}<br>Use this ID in the Dashboard tab.</div>`;
+            } catch (error) {
+                console.error('Create profile error:', error);
+                resultDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function analyzeResume() {
+            const data = {
+                resume: document.getElementById('resume').value,
+                jd_url: document.getElementById('jd_url').value
+            };
+
+            const resultDiv = document.getElementById('analyze-result');
+            resultDiv.innerHTML = '<div class="loading">Analyzing resume... This may take a moment.</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/resume/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to analyze resume');
+                }
+
+                const result = await response.json();
+                console.log('Analyze result:', result);
+                
+                if (!result.score && result.score !== 0) {
+                    throw new Error('Invalid response from server - missing score');
+                }
+                
+                let html = `<div class="result">
+                    <h3>📊 Match Score: ${result.score}%</h3>
+                    <h4>Missing Skills:</h4>
+                    <ul>
+                        ${(result.missing_skills || []).map(skill => `<li>${skill}</li>`).join('')}
+                    </ul>
+                    <h4>Suggestions:</h4>
+                    <ul>
+                        ${(result.suggestions || []).map(suggestion => `<li>${suggestion}</li>`).join('')}
+                    </ul>
+                </div>`;
+                
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Analyze error:', error);
+                resultDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function generateAnswer() {
+            const data = {
+                profile: document.getElementById('profile_text').value,
+                jd_url: document.getElementById('answer_jd_url').value,
+                question: document.getElementById('question').value
+            };
+
+            const resultDiv = document.getElementById('answer-result');
+            resultDiv.innerHTML = '<div class="loading">Generating answer... This may take a moment.</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/generate/answer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to generate answer');
+                }
+
+                const result = await response.json();
+                console.log('Generate answer result:', result);
+                
+                if (!result.answer) {
+                    throw new Error('Invalid response from server - missing answer');
+                }
+                
+                resultDiv.innerHTML = `<div class="result">
+                    <h3>✍️ Generated Answer:</h3>
+                    <p>${result.answer}</p>
+                </div>`;
+            } catch (error) {
+                console.error('Generate answer error:', error);
+                resultDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function addApplication() {
+            const userId = document.getElementById('dashboard_user_id').value;
+            
+            if (!userId) {
+                alert('❌ Please enter a User ID first!');
+                return;
+            }
+            
+            const data = {
+                user_id: parseInt(userId),
+                company_name: document.getElementById('company_name').value,
+                job_title: document.getElementById('job_title').value,
+                jd_url: document.getElementById('app_jd_url').value,
+                status: document.getElementById('status').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/applications`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to add application');
+                }
+
+                await response.json();
+                alert('✅ Application added!');
+                
+                // Clear form
+                document.getElementById('company_name').value = '';
+                document.getElementById('job_title').value = '';
+                document.getElementById('app_jd_url').value = '';
+                
+                loadDashboard();
+            } catch (error) {
+                console.error('Add application error:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+
+        async function loadDashboard() {
+            const userId = document.getElementById('dashboard_user_id').value;
+            const listDiv = document.getElementById('applications-list');
+            
+            if (!userId) {
+                listDiv.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Please enter a User ID above and click "Load Applications"</p>';
+                return;
+            }
+            
+            listDiv.innerHTML = '<div class="loading">Loading applications...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/applications/user/${userId}`);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to load applications');
+                }
+                
+                const applications = await response.json();
+                console.log('Applications:', applications);
+
+                if (applications.length === 0) {
+                    listDiv.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">No applications yet. Add one above!</p>';
+                    return;
+                }
+
+                let html = '<div class="applications-grid">';
+                applications.forEach(app => {
+                    const statusClass = app.status.toLowerCase().replace(/\s+/g, '-');
+                    html += `
+                        <div class="app-card">
+                            <h3>${app.job_title}</h3>
+                            <p><strong>Company:</strong> ${app.company_name}</p>
+                            <p><strong>Applied:</strong> ${new Date(app.applied_date).toLocaleDateString()}</p>
+                            ${app.score ? `<p><strong>Match Score:</strong> ${app.score}%</p>` : ''}
+                            <span class="status-badge status-${statusClass}">${app.status}</span>
+                            ${app.notes ? `<p style="margin-top: 10px;"><em>${app.notes}</em></p>` : ''}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                listDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Load dashboard error:', error);
+                listDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function searchJobs() {
+            const resume = document.getElementById('matcher_resume').value;
+            const query = document.getElementById('job_query').value;
+            const location = document.getElementById('job_location').value;
+            const minScore = parseInt(document.getElementById('min_score').value) || 60;
+
+            if (!resume || !query) {
+                alert('⚠️ Please enter both resume and job search query!');
+                return;
+            }
+
+            const data = {
+                resume: resume,
+                job_query: query,
+                location: location,
+                min_match_score: minScore
+            };
+
+            const resultDiv = document.getElementById('matcher-result');
+            resultDiv.innerHTML = '<div class="loading">🔍 Searching LinkedIn jobs and analyzing matches... This may take 30-60 seconds.</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/jobs/search`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to search jobs');
+                }
+
+                const result = await response.json();
+                console.log('Job search result:', result);
+                
+                if (!result.jobs || result.jobs.length === 0) {
+                    resultDiv.innerHTML = '<div class="result">No matching jobs found. Try adjusting your search criteria or lowering the minimum match score.</div>';
+                    return;
+                }
+                
+                let html = `<div class="result">
+                    <h3>🎯 Found ${result.jobs.length} Matching Jobs</h3>
+                    <div class="applications-grid" style="margin-top: 20px;">`;
+                
+                result.jobs.forEach(job => {
+                    const scoreColor = job.score >= 80 ? '#28a745' : job.score >= 60 ? '#ffc107' : '#dc3545';
+                    html += `
+                        <div class="app-card" style="border-left-color: ${scoreColor};">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <h3 style="margin: 0;">${job.title}</h3>
+                                <span style="background: ${scoreColor}; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                                    ${job.score}% Match
+                                </span>
+                            </div>
+                            <p><strong>Company:</strong> ${job.company}</p>
+                            <p><strong>Location:</strong> ${job.location || 'Not specified'}</p>
+                            <p style="margin-top: 10px; color: #666;">${job.description.substring(0, 200)}...</p>
+                            ${job.matching_skills && job.matching_skills.length > 0 ? `
+                                <p style="margin-top: 10px;">
+                                    <strong>✅ Matching Skills:</strong> 
+                                    ${job.matching_skills.slice(0, 5).join(', ')}
+                                    ${job.matching_skills.length > 5 ? '...' : ''}
+                                </p>
+                            ` : ''}
+                            ${job.missing_skills && job.missing_skills.length > 0 ? `
+                                <p style="margin-top: 5px;">
+                                    <strong>⚠️ Missing Skills:</strong> 
+                                    ${job.missing_skills.slice(0, 5).join(', ')}
+                                    ${job.missing_skills.length > 5 ? '...' : ''}
+                                </p>
+                            ` : ''}
+                            <a href="${job.url}" target="_blank" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: 600;">
+                                🔗 View & Apply
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Job search error:', error);
+                resultDiv.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

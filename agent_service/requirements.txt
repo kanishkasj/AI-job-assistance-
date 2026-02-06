@@ -1,0 +1,7 @@
+langchain
+langchain-community
+mistralai
+beautifulsoup4
+requests
+pydantic
+python-dotenv
