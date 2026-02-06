@@ -1,8 +1,7 @@
-# Job Application Assistant 🚀
-
+# Job Application Assistant 
 An AI-powered job application platform that helps users optimize their resumes, generate tailored answers, and track applications.
 
-## Features ✨
+## Features 
 
 ### 1. **Profile Management (Autofill Agent)**
 - Store user information (name, email, phone, skills, education, work history)
@@ -31,7 +30,7 @@ An AI-powered job application platform that helps users optimize their resumes, 
   - Rejected
 - View application history and notes
 
-## Tech Stack 🛠️
+## Tech Stack 
 
 ### Backend
 - **FastAPI**: Modern Python web framework
@@ -45,8 +44,7 @@ An AI-powered job application platform that helps users optimize their resumes, 
 - **Vanilla JavaScript**: No framework dependencies
 - **Responsive Design**: Works on all devices
 
-## Architecture 🏗️
-
+## Architecture 
 ```
 ├── Backend (FastAPI)
 │   ├── API Endpoints
@@ -60,7 +58,7 @@ An AI-powered job application platform that helps users optimize their resumes, 
     └── Interactive UI
 ```
 
-## Installation & Setup 📦
+## Installation & Setup 
 
 ### Prerequisites
 - Python 3.8+
@@ -101,7 +99,7 @@ uvicorn main:app --reload
 - API Docs: http://127.0.0.1:8000/docs
 - Health Check: http://127.0.0.1:8000/status
 
-## API Endpoints 🔌
+## API Endpoints 
 
 ### User Management
 - `POST /api/users` - Create user profile
@@ -119,7 +117,7 @@ uvicorn main:app --reload
 ### System
 - `GET /status` - Health check
 
-## Usage Guide 📘
+## Usage Guide 
 
 ### 1. Create Your Profile
 1. Go to "Profile" tab
@@ -148,7 +146,7 @@ uvicorn main:app --reload
 3. Add new applications with company, role, and status
 4. Click "Load Applications" to view all your applications
 
-## Logging 📊
+## Logging 
 
 Enhanced structured logging includes:
 - Timestamp for each request
@@ -163,7 +161,7 @@ Logs format:
 2026-02-05 10:30:16 - __main__ - INFO - User created successfully with ID: 1
 ```
 
-## Database Schema 💾
+## Database Schema 
 
 ### Users Table
 ```sql
@@ -190,7 +188,7 @@ Logs format:
 - notes: Text
 ```
 
-## File Structure 📁
+## File Structure 
 
 ```
 assessment/
@@ -212,14 +210,14 @@ assessment/
     └── requirements.txt   # Agent dependencies
 ```
 
-## Security Notes 🔒
+## Security Notes 
 
 - `.env` file contains sensitive API keys - **never commit to version control**
 - Add `.env` to `.gitignore`
 - Use environment variables for all secrets
 - CORS enabled for development (restrict in production)
 
-## Future Enhancements 🚀
+## Future Enhancements 
 
 - [ ] User authentication and authorization
 - [ ] File upload for resume PDFs
@@ -230,7 +228,7 @@ assessment/
 - [ ] Integration with LinkedIn API
 - [ ] Multi-language support
 
-## Troubleshooting 🔧
+## Troubleshooting 
 
 ### Server won't start
 - Check if port 8000 is available
@@ -247,30 +245,30 @@ assessment/
 - Check SQLite installation
 - Verify file permissions
 
-## Team Roles Implementation ✅
+## Team Roles Implementation 
 
 ### Backend Engineers
-✅ Robust FastAPI architecture  
-✅ RESTful API endpoints  
-✅ Database management with SQLAlchemy  
-✅ Structured logging  
-✅ Error handling and validation  
-✅ CORS configuration  
-✅ Health monitoring  
+✔ Robust FastAPI architecture  
+✔ RESTful API endpoints  
+✔ Database management with SQLAlchemy  
+✔ Structured logging 
+✔ Error handling and validation  
+✔ CORS configuration  
+✔ Health monitoring  
 
 ### Data Scientists
-✅ Web scraping implementation  
-✅ LLM prompt engineering  
-✅ Resume analysis agent  
-✅ Answer generation agent  
-✅ Structured data parsing  
-✅ AI workflow design  
+✔ Web scraping implementation  
+✔ LLM prompt engineering  
+✔ Resume analysis agent  
+✔ Answer generation agent  
+✔ Structured data parsing  
+✔ AI workflow design  
 
-## License 📄
+## License 
 
 This project is for educational purposes.
 
-## Support 💬
+## Support 
 
 For issues or questions, check the logs or API documentation at `/docs`.
 
